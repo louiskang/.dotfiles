@@ -18,6 +18,7 @@ set showbreak=└───
 
 colorscheme ir_black
 
+
 " Remapping keys
 noremap j gj
 noremap gj j
@@ -39,6 +40,7 @@ map <C-s> :w<CR>
 imap <C-s> <C-O>:w<CR>
 map <C-\> <C-s>\ll
 imap <C-\> <C-s><C-O>\ll
+
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
