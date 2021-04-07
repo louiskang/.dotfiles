@@ -1,7 +1,7 @@
 # Confirm file delete
 function rmls() {
 
-	ls -AGh $@;
+	ls -A $@;
 	echo -n "remove file(s) (y/n)? ";
 	read a;
 	if [[ "$a" == "y" ]]; then
@@ -11,6 +11,16 @@ function rmls() {
 }
 
 alias mv='mv -i'
-alias ls='ls -Gh'
 alias rm='rmls'
 
+if [[ "$(uname 2> /dev/null)" == "Linux" ]]; then
+    alias ls='ls --color=auto -h'
+else
+    alias ls='ls -Gh'
+fi
+alias ll='ls -l'
+alias la='ls -a'
+
+
+# username@hostname directory #
+PROMPT='%F{green}%n@%m %F{blue}%1~ %f%# '

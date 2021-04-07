@@ -18,7 +18,6 @@ set breakindent
 set showbreak=└───
 
 colorscheme ir_black
-set guifont=SF\ Mono:h14
 
 " Remapping keys
 noremap j gj
