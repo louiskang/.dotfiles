@@ -24,3 +24,8 @@ alias la='ls -a'
 
 # username@hostname directory #
 PROMPT='%F{green}%n@%m %F{blue}%1~ %f%# '
+
+
+# binds up and down to partial history search
+bindkey "^[[A" history-beginning-search-backward
+bindkey "^[[B" history-beginning-search-forward
