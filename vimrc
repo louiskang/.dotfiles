@@ -5,7 +5,6 @@ syntax on               " syntax highlighting
 set hlsearch            " highlight the last searched term
 set showmatch           " show matching brackets
  
-
 set expandtab
 set shiftwidth=2
 set tabstop=2
