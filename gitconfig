@@ -5,3 +5,5 @@
 	email = louis@louiskang.group
 [init]
 	defaultBranch = main
+[pull]
+	rebase = false
