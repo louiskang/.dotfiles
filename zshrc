@@ -1,3 +1,7 @@
+if [[ "$(uname 2> /dev/null)" != "Linux" ]]; then
+  source "$HOME/.dotfiles/zshrc_macos"
+fi
+
 # Confirm file delete
 function rmls() {
 

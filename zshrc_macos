@@ -1,0 +1,25 @@
+export PATH="$PATH:/Library/TeX/texbin"
+#export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:$PATH"
+export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"
+#export PATH="$HOME/.gem/ruby/2.7.0/bin:$PATH"
+
+
+# ssh tunnel at port 8889 to nccu for jupyterlab
+alias tunnelnccu='ssh -CNL 8889:localhost:8889 nccu'
+function jupyternccu() {
+  ssh -CL 8889:localhost:8889 nccu ". ~/.zshrc ; jupyter lab --no-browser --port=8889"
+}
+
+
+alias preview='open -a "Preview"'
+alias quicktime='open -a "QuickTime Player"'
+alias finder='open -a "Finder"'
+alias mathematica='open -a "Mathematica"'
+alias math='/Applications/Mathematica.app/Contents/MacOS/MathKernel'
+alias mathnb='~/Library/Mathematica/Applications/MyShellNotebook.sh'
+#alias gcc='/usr/local/bin/gcc-7'
+
+
+eval "$(rbenv init -)"
+eval "$(pyenv init -)"
+
