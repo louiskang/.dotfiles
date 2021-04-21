@@ -5,9 +5,9 @@ export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"
 
 
 # ssh tunnel at port 8889 to nccu for jupyterlab
-alias tunnelnccu='ssh -CNL 8889:localhost:8889 nccu'
+alias tunnelnccu='ssh -t -CNL 8889:localhost:8889 nccu'
 function jupyternccu() {
-  ssh -CL 8889:localhost:8889 nccu ". ~/.zshrc ; jupyter lab --no-browser --port=8889"
+  ssh -t -CL 8889:localhost:8889 nccu ". ~/.zshrc ; jupyter lab --no-browser --port=8889"
 }
 
 
