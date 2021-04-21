@@ -40,4 +40,4 @@ bindkey "^[[B" history-beginning-search-forward-end
 
 # setup Intel oneAPI environment
 #. /opt/intel/oneapi/setvars.sh
-export MKLROOT="/opt/intel/oneapi/mkl/latest"
+. /opt/intel/oneapi/mkl/latest/env/vars.sh
