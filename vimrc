@@ -19,6 +19,9 @@ set showbreak=└───
 colorscheme ir_black
 
 
+" word break at underscore
+set iskeyword-=_
+
 " Remapping keys
 noremap j gj
 noremap gj j
