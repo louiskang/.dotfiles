@@ -10,6 +10,98 @@ function jupyternccu() {
   ssh -t -CL 8889:localhost:8889 nccu ". ~/.zshrc ; jupyter lab --no-browser --port=8889"
 }
 
+# RIKEN Library proxy toggler. Proxy file must be installed.
+# Usage: rikenproxy status/on/off
+rikenproxy () {
+  if [[ $# -ne 1 ]]; then
+    echo 'error: rikenproxy needs one argument: status/on/off'
+    return 1
+  fi
+  if [[ "$1" == "status" ]]; then
+    networksetup -getautoproxyurl Wi-Fi
+  elif [[ "$1" == "on" ]]; then
+    networksetup -setautoproxystate Wi-Fi on
+  elif [[ "$1" == "off" ]]; then
+    networksetup -setautoproxystate Wi-Fi off
+  else
+    echo 'error: rikenproxy needs one argument: status/on/off'
+    return 1
+  fi
+}
+
+# Usage: fromnccu FILE_OR_DIR1 [FILE_OR_DIR2 ...]
+# This will copy newer files /PWD/FILE_OR_DIR1, etc.,
+# from the server to become local files /PWD/FILE_OR_DIR1, etc.
+function fromnccu() {
+ 
+  if [[ $# -lt 1 ]]; then
+    echo 'error: fromnccu needs at least one argument'
+    return 1
+  fi
+ 
+  pwd=$(dirs)
+  files=()
+  for file in ${@}; do
+    files+=("$pwd/${file%/}")
+  done
+ 
+  echo -n "receive ${@%/} from nccu:$pwd/ (y/n/all)? "
+  read a;
+  if [[ "$a" == "y" ]]; then
+    rsync -avzhu --progress \
+      --exclude="*/.DS_Store" \
+      --exclude="*/.*.swp" \
+      --exclude="*/.unison" \
+      --exclude="*/.ipynb_checkpoints" \
+      --exclude="*/.git" \
+      --exclude="*/compile.sh" \
+      --exclude="*/*.dat" \
+      --exclude="*/*.dat.gz" \
+      "nccu:${files[*]}" "$PWD"
+  elif [[ "$a" == "all" ]]; then
+    rsync -avzhu --progress \
+      --exclude="*/.DS_Store" \
+      --exclude="*/.*.swp" \
+      --exclude="*/.unison" \
+      --exclude="*/.ipynb_checkpoint" \
+      --exclude="*/.git" \
+      "nccu:${files[*]}" "$PWD"
+  fi  
+ 
+}
+ 
+function tonccu() {
+ 
+  if [[ $# -lt 1 ]]; then
+    echo 'error: tonccu needs one argument'
+    return 1
+  fi  
+ 
+  pwd=$(dirs)
+  files=${@%/}
+ 
+  echo -n "send $files to nccu:$pwd/ (y/n/all)? "
+  read a;
+  if [[ "$a" == "y" ]]; then
+    rsync -avzhu --progress \
+      --exclude="*/.DS_Store" \
+      --exclude="*/.*.swp" \
+      --exclude="*/.unison" \
+      --exclude="*/compile.sh" \
+      --exclude="*/*.dat" \
+      --exclude="*/*.dat.gz" \
+      "$files" "nccu:$pwd"
+  elif [[ "$a" == "all" ]]; then
+    rsync -avzhu --progress \
+      --exclude="*/.DS_Store" \
+      --exclude="*/.*.swp" \
+      --exclude="*/.unison" \
+      "$files" "nccu:$pwd"
+  fi  
+ 
+}
+
+
 
 alias preview='open -a "Preview"'
 alias quicktime='open -a "QuickTime Player"'
