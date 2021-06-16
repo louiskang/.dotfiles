@@ -4,10 +4,10 @@ export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"
 #export PATH="$HOME/.gem/ruby/2.7.0/bin:$PATH"
 
 
-# ssh tunnel at port 8889 to nccu for jupyterlab
-alias tunnelnccu='ssh -t -CNL 8889:localhost:8889 nccu'
+# ssh tunnel at port 10000 to nccu for jupyterlab
+alias tunnelnccu='ssh -t -CNL 10000:localhost:10000 nccu'
 function jupyternccu() {
-  ssh -t -CL 8889:localhost:8889 nccu ". ~/.zshrc ; jupyter lab --no-browser --port=8889"
+  ssh -t -CL 10000:localhost:10000 nccu ". ~/.zshrc ; jupyter lab --no-browser --port=10000"
 }
 
 # RIKEN Library proxy toggler. Proxy file must be installed.
