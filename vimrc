@@ -43,6 +43,8 @@ map <C-s> :w<CR>
 imap <C-s> <C-O>:w<CR>
 map <C-\> <C-s>\ll
 imap <C-\> <C-s><C-O>\ll
+map <C-_> <C-s>\ll :!pdfcrop "%:r.pdf"<CR>
+imap <C-_> <C-s><C-O>\ll <C-O>:!pdfcrop "%:r.pdf"<CR>
 
 
 " allow backspacing over everything in insert mode
@@ -56,7 +58,7 @@ endif
 
 " Reload .vimrc
 noremap ",v :sp ~/.vimrc<CR>
-noremap <silent> ",V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR> 
+noremap <silent> ",V :source ~/.dotfiles/vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR> 
 noremap ",l :sp ~/.vim/ftplugin/tex/texrc<CR>
 noremap <silent> ",L :source ~/.vim/ftplugin/tex/texrc<CR>:filetype detect<CR>:exe ":echo 'texrc reloaded'"<CR> 
 
