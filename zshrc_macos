@@ -114,5 +114,5 @@ alias mathnb='~/Library/Mathematica/Applications/MyShellNotebook.sh'
 
 
 eval "$(rbenv init -)"
-eval "$(pyenv init -)"
+eval "$(pyenv init --path)"
 
