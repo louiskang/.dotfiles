@@ -1,8 +1,5 @@
 {
-  "_comment_": "copy to ~/.config/karabiner/assets/complex_modifications/"
-}
-
-{
+  "_comment_": "copy to ~/.config/karabiner/assets/complex_modifications/",
   "title": "Keyboard shortcuts for Terminal apps",
   "maintainers": [
     "louis"
