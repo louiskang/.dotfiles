@@ -1,0 +1,36 @@
+/*
+copy to ~/Library/KeyBindings/
+
+Key Modifiers
+^ : Ctrl
+$ : Shift
+~ : Option (Alt)
+@ : Command (Apple)
+# : Numeric Keypad
+*/
+
+{
+  "\UF729"  = moveToBeginningOfParagraph:;                     // home
+  "\UF72B"  = moveToEndOfParagraph:;                           // end
+  "$\UF729" = moveToBeginningOfParagraphAndModifySelection:;   // shift-home
+  "$\UF72B" = moveToEndOfParagraphAndModifySelection:;         // shift-end
+  
+  "@\UF729" = moveToBeginningOfDocument:;                      // cmd-home
+  "@\UF72B" = moveToEndOfDocument:;                            // cmd-end
+  "@$\UF729" = moveToBeginningOfDocumentAndModifySelection:;   // cmd-shift-home
+  "@$\UF72B" = moveToEndOfDocumentAndModifySelection:;         // cmd-shift-end
+  
+  "@\UF702"  = "moveWordBackward:";                            /* Cmd  + LeftArrow */
+  "@\UF703"  = "moveWordForward:";                             /* Cmd  + RightArrow */
+  "@$\UF702" = "moveWordBackwardAndModifySelection:";          /* Shift + Cmd  + Leftarrow */
+  "@$\UF703" = "moveWordForwardAndModifySelection:";           /* Shift + Cmd  + Rightarrow */
+  "@\U007F"  = "deleteWordBackward:";                          /* Cmd  + Backspace */
+  "@\UF728"  = "deleteWordForward:";                           /* Cmd  + Delete */
+
+  "^\UF702"  = "moveToBeginningOfLine:";                       /* Ctrl + LeftArrow */
+  "^\UF703"  = "moveToEndOfLine:";                             /* Ctrl + RightArrow */
+  "^$\UF702" = "moveToBeginningOfLineAndModifySelection:";     /* Shift + Ctrl + Leftarrow */
+  "^$\UF703" = "moveToEndOfLineForwardAndModifySelection:";    /* Shift + Ctrl + Rightarrow */
+  "^\U007F"  = "deleteToBeginningOfLine:";                     /* Ctrl + Backspace */
+  "^\UF728"  = "deleteToEndOfLine:";                           /* Ctrl + Delete */
+}
