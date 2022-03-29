@@ -37,8 +37,14 @@ zle -N history-beginning-search-forward-end history-search-end
 bindkey "^[[A" history-beginning-search-backward-end
 bindkey "^[[B" history-beginning-search-forward-end
 
-bindkey "^[[H"  beginning-of-line
-bindkey "^[[F"  end-of-line
+# used by karabiner-elements
+WORDCHARS=''
+bindkey '^[e' redo
+bindkey '^[^B' vi-backward-blank-word
+bindkey '^[^F' vi-forward-blank-word
+bindkey '^U' backward-kill-line
+#bindkey "^[[H"  beginning-of-line
+#bindkey "^[[F"  end-of-line
 
 
 # setup Intel oneAPI environment
