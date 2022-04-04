@@ -1,0 +1,13 @@
+#!/bin/sh
+# cd /Applications/Mathematica.app/Contents/MacOS
+# mv Mathematica MathematicaApp
+# cp [this file] /Applications/Mathematica.app/Contents/MacOS
+# chmod +x Mathematica
+
+resetcolor () {
+  sleep 1
+  defaults delete -g AppleHighlightColor
+}
+
+defaults write -g AppleHighlightColor -string "0.764700 0.976500 0.568600"
+resetcolor & exec "$(dirname $0)/MathematicaApp"
