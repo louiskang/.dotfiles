@@ -105,7 +105,6 @@ function send() {
 }
 
 
-
 alias preview='open -a "Preview"'
 alias quicktime='open -a "QuickTime Player"'
 alias finder='open -a "Finder"'
