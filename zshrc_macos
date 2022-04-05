@@ -29,23 +29,25 @@ rikenproxy () {
   fi
 }
 
-# Usage: fromnccu FILE_OR_DIR1 [FILE_OR_DIR2 ...]
+
+# Usage: rec HOSTNAME FILE_OR_DIR1 [FILE_OR_DIR2 ...]
 # This will copy newer files /PWD/FILE_OR_DIR1, etc.,
 # from the server to become local files /PWD/FILE_OR_DIR1, etc.
-function fromnccu() {
+function rec() {
  
-  if [[ $# -lt 1 ]]; then
-    echo 'error: fromnccu needs at least one argument'
+  if [[ $# -lt 2 ]]; then
+    echo 'Usage: rec HOSTNAME FILE_OR_DIR1 [FILE_OR_DIR2 ...]'
     return 1
   fi
  
   pwd=$(dirs)
+  args=( "${@:2}" )
   files=()
-  for file in ${@}; do
-    files+=("$pwd/${file%/}")
+  for arg in "${args[@]}"; do
+    files+=("$pwd/${arg%/}")
   done
  
-  echo -n "receive ${@%/} from nccu:$pwd/ (y/n/all)? "
+  echo -n "receive ${args[@]%/} from $1:$pwd/ (y/n/all)? "
   read a;
   if [[ "$a" == "y" ]]; then
     rsync -avzhu --progress \
@@ -57,7 +59,7 @@ function fromnccu() {
       --exclude="*/compile.sh" \
       --exclude="*/*.dat" \
       --exclude="*/*.dat.gz" \
-      "nccu:${files[*]}" "$PWD"
+      "$1:${files[*]}" "$PWD"
   elif [[ "$a" == "all" ]]; then
     rsync -avzhu --progress \
       --exclude="*/.DS_Store" \
@@ -65,22 +67,23 @@ function fromnccu() {
       --exclude="*/.unison" \
       --exclude="*/.ipynb_checkpoint" \
       --exclude="*/.git" \
-      "nccu:${files[*]}" "$PWD"
+      "$1:${files[*]}" "$PWD"
   fi  
  
 }
  
-function tonccu() {
+function send() {
  
-  if [[ $# -lt 1 ]]; then
-    echo 'error: tonccu needs one argument'
+  if [[ $# -lt 2 ]]; then
+    echo 'Usage: send HOSTNAME FILE_OR_DIR1 [FILE_OR_DIR2 ...]'
     return 1
   fi  
  
   pwd=$(dirs)
-  files=${@%/}
+  args=( "${@:2}" )
+  files=( "${args[@]%/}" )
  
-  echo -n "send $files to nccu:$pwd/ (y/n/all)? "
+  echo -n "send $files to $1:$pwd/ (y/n/all)? "
   read a;
   if [[ "$a" == "y" ]]; then
     rsync -avzhu --progress \
@@ -90,13 +93,13 @@ function tonccu() {
       --exclude="*/compile.sh" \
       --exclude="*/*.dat" \
       --exclude="*/*.dat.gz" \
-      "$files" "nccu:$pwd"
+      "${files[@]}" "$1:$pwd"
   elif [[ "$a" == "all" ]]; then
     rsync -avzhu --progress \
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
-      "$files" "nccu:$pwd"
+      "${files[@]}" "$1:$pwd"
   fi  
  
 }
@@ -115,4 +118,3 @@ alias mathnb='~/Library/Mathematica/Applications/MyShellNotebook.sh'
 
 eval "$(rbenv init -)"
 eval "$(pyenv init --path)"
-
