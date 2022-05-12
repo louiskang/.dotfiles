@@ -30,13 +30,13 @@ rikenproxy () {
 }
 
 
-# Usage: rec HOSTNAME FILE_OR_DIR1 [FILE_OR_DIR2 ...]
+# Usage: from HOSTNAME FILE_OR_DIR1 [FILE_OR_DIR2 ...]
 # This will copy newer files /PWD/FILE_OR_DIR1, etc.,
 # from the server to become local files /PWD/FILE_OR_DIR1, etc.
-function rec() {
+function from() {
  
   if [[ $# -lt 2 ]]; then
-    echo 'Usage: rec HOSTNAME FILE_OR_DIR1 [FILE_OR_DIR2 ...]'
+    echo 'Usage: from HOSTNAME FILE_OR_DIR1 [FILE_OR_DIR2 ...]'
     return 1
   fi
  
@@ -72,10 +72,10 @@ function rec() {
  
 }
  
-function send() {
+function to() {
  
   if [[ $# -lt 2 ]]; then
-    echo 'Usage: send HOSTNAME FILE_OR_DIR1 [FILE_OR_DIR2 ...]'
+    echo 'Usage: to HOSTNAME FILE_OR_DIR1 [FILE_OR_DIR2 ...]'
     return 1
   fi  
  
