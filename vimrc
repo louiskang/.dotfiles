@@ -1,3 +1,5 @@
+scriptencoding utf-8
+
 set number
 
 set ruler               " show the cursor position
