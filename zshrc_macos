@@ -29,13 +29,13 @@ function rikenproxy () {
 }
 
 
-# Usage: from HOSTNAME FILE_OR_DIR1 [FILE_OR_DIR2 ...]
-# This will copy newer files /PWD/FILE_OR_DIR1, etc.,
-# from the server to become local files /PWD/FILE_OR_DIR1, etc.
+# Usage: from hostname file_or_dir1 [file_or_dir2 ...]
+# This will copy newer files /pwd/file_or_dir1, etc.,
+# from the server to become local files /pwd/file_or_dir1, etc.
 function from () {
  
   if [[ $# -lt 2 ]]; then
-    echo 'Usage: from HOSTNAME FILE_OR_DIR1 [FILE_OR_DIR2 ...]'
+    echo 'Usage: from hostname file_or_dir1 [file_or_dir2 ...]'
     return 1
   fi
  
@@ -74,7 +74,7 @@ function from () {
 function to () {
  
   if [[ $# -lt 2 ]]; then
-    echo 'Usage: to HOSTNAME FILE_OR_DIR1 [FILE_OR_DIR2 ...]'
+    echo 'Usage: to hostname file_or_dir1 [file_or_dir2 ...]'
     return 1
   fi  
  
