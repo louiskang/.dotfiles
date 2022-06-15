@@ -5,13 +5,18 @@ fi
 # Confirm file delete
 function rmls() {
 
-	ls -A $@;
+	ls -A "$@";
 	echo -n "remove file(s) (y/n)? ";
 	read a;
 	if [[ "$a" == "y" ]]; then
-	  \rm $@
+	  \rm "$@"
 	fi
 
+}
+
+function pdfoutline() {
+  for file in "$@"
+  gs -o "${file%.*}-outlined.pdf" -dNoOutputFonts -sDEVICE=pdfwrite "$file"
 }
 
 alias mv='mv -i'
