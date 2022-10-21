@@ -16,7 +16,17 @@ function rmls() {
 
 function pdfoutline() {
   for file in "$@"
-  gs -o "${file%.*}-outlined.pdf" -dNoOutputFonts -sDEVICE=pdfwrite "$file"
+  do
+    gs -o "${file%.*}-outlined.pdf" -dNoOutputFonts -sDEVICE=pdfwrite "$file"
+  done
+}
+function pdfocrop() {
+  for file in "$@"
+  do
+    newfile="${file%.*}-crop.pdf"
+    gs -o "$newfile" -dNoOutputFonts -sDEVICE=pdfwrite "$file"
+    pdfcrop "$newfile" "$newfile"
+  done
 }
 
 alias mv='mv -i'
