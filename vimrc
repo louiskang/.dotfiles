@@ -12,6 +12,7 @@ set shiftwidth=2
 set tabstop=2
 
 set wrap
+set display=lastline
 set linebreak
 set autoindent
 "set smartindent
