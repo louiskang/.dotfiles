@@ -63,6 +63,6 @@ bindkey '^U' backward-kill-line
 
 
 # setup Intel oneAPI environment
-#. /opt/intel/oneapi/setvars.sh
-. /opt/intel/oneapi/mkl/latest/env/vars.sh
-. /opt/intel/oneapi/compiler/latest/env/vars.sh
+#source /opt/intel/oneapi/setvars.sh
+source /opt/intel/oneapi/mkl/latest/env/vars.sh
+#source /opt/intel/oneapi/compiler/latest/env/vars.sh
