@@ -46,7 +46,7 @@ function from () {
     files+=("$pwd/${arg%/}")
   done
  
-  echo -n "receive ${args[@]%/} from $1:$pwd/ (y/n/all)? "
+  echo -n "receive ${args[@]%/} from $1:$pwd/ (y/n/all/force)? "
   read a;
   if [[ "$a" == "y" ]]; then
     rsync -avzhu --progress \
@@ -64,9 +64,19 @@ function from () {
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
-      --exclude="*/.ipynb_checkpoint" \
+      --exclude="*/.ipynb_checkpoints" \
       --exclude="*/.git" \
       "$1:${files[*]}" "$PWD"
+  elif [[ "$a" == "force" ]]; then
+    rsync -avzh --progress \
+      --exclude="*/.DS_Store" \
+      --exclude="*/.*.swp" \
+      --exclude="*/.unison" \
+      --exclude="*/.ipynb_checkpoints" \
+      --exclude="*/.git" \
+      "$1:${files[*]}" "$PWD"
+  else
+    echo -n 'Terminating without transfer'
   fi  
  
 }
@@ -82,13 +92,15 @@ function to () {
   args=( "${@:2}" )
   files=( "${args[@]%/}" )
  
-  echo -n "send $files to $1:$pwd/ (y/n/all)? "
+  echo -n "send $files to $1:$pwd/ (y/n/all/force)? "
   read a;
   if [[ "$a" == "y" ]]; then
     rsync -avzhu --progress \
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
+      --exclude="*/.ipynb_checkpoints" \
+      --exclude="*/.git" \
       --exclude="*/compile.sh" \
       --exclude="*/*.dat" \
       --exclude="*/*.dat.gz" \
@@ -98,7 +110,19 @@ function to () {
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
+      --exclude="*/.ipynb_checkpoints" \
+      --exclude="*/.git" \
       "${files[@]}" "$1:$pwd"
+  elif [[ "$a" == "force" ]]; then
+    rsync -avzh --progress \
+      --exclude="*/.DS_Store" \
+      --exclude="*/.*.swp" \
+      --exclude="*/.unison" \
+      --exclude="*/.ipynb_checkpoints" \
+      --exclude="*/.git" \
+      "${files[@]}" "$1:$pwd"
+  else
+    echo -n 'Terminating without transfer'
   fi  
  
 }
