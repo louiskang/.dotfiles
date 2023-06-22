@@ -6,7 +6,7 @@ fi
 function rmls() {
 
 	ls -A "$@";
-	echo -n "remove file(s) (y/n)? ";
+	echo -n "remove file(s)? [y/n] ";
 	read a;
 	if [[ "$a" == "y" ]]; then
 	  \rm "$@"
@@ -27,6 +27,19 @@ function pdfocrop() {
     gs -o "$newfile" -dNoOutputFonts -sDEVICE=pdfwrite "$file"
     pdfcrop "$newfile" "$newfile"
   done
+}
+
+# Set standard permissions
+function stdmod() {
+
+  find . -perm 777
+	echo -n "change permissions to 755 for directories and 644 for files? [y/n] ";
+	read a;
+	if [[ "$a" == "y" ]]; then
+    find . -type d -perm 777 -exec chmod 755 '{}' \;
+    find . -type f -perm 777 -exec chmod 644 '{}' \;
+	fi
+
 }
 
 alias mv='mv -i'
