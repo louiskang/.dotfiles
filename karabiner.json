@@ -6,6 +6,51 @@
   ],
   "rules": [
     {
+      "description": "Switch command and control for phy",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "left_command"
+          },
+          "to": [
+            {
+              "key_code": "left_control"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "/miniconda3/envs/phy/bin/python$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "right_command"
+          },
+          "to": [
+            {
+              "key_code": "right_control"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "/miniconda3/envs/phy/bin/python$"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+
+    {
       "description": "Undo/redo",
       "manipulators": [
         {
