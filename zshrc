@@ -42,6 +42,15 @@ function stdmod() {
 
 }
 
+
+function phy-fix-waveforms () {
+  
+  (echo "import numpy as np" ; \
+    echo "np.load('_phy_spikes_subset.waveforms.npy')") | python
+
+}
+
+
 alias mv='mv -i'
 alias rm='rmls'
 
