@@ -16,11 +16,11 @@ function rikenproxy () {
     echo 'error: rikenproxy needs one argument: status/on/off'
     return 1
   fi
-  if [[ "$1" == "status" ]]; then
+  if [[ "$1" = "status" ]]; then
     networksetup -getautoproxyurl Wi-Fi
-  elif [[ "$1" == "on" ]]; then
+  elif [[ "$1" = "on" ]]; then
     networksetup -setautoproxystate Wi-Fi on
-  elif [[ "$1" == "off" ]]; then
+  elif [[ "$1" = "off" ]]; then
     networksetup -setautoproxystate Wi-Fi off
   else
     echo 'error: rikenproxy needs one argument: status/on/off'
@@ -45,11 +45,17 @@ function from () {
   for arg in "${args[@]}"; do
     files+=("$pwd/${arg%/}")
   done
+
+  if [[ $(hostname) = "akashi.bnf.brain.riken.jp" ]]; then
+    flags="-avh"
+  else
+    flags="-avzh"
+  fi
  
   echo -n "receive ${args[@]%/} from $1:$pwd/ (y/n/all/force)? "
   read a;
-  if [[ "$a" == "y" ]]; then
-    rsync -avzhu --progress \
+  if [[ "$a" = "y" ]]; then
+    rsync "$flags" -u --progress \
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
@@ -60,7 +66,7 @@ function from () {
       --exclude="*/*.dat.gz" \
       "$1:${files[*]}" "$PWD"
   elif [[ "$a" == "all" ]]; then
-    rsync -avzhu --progress \
+    rsync "$flags" -u --progress \
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
@@ -68,7 +74,7 @@ function from () {
       --exclude="*/.git" \
       "$1:${files[*]}" "$PWD"
   elif [[ "$a" == "force" ]]; then
-    rsync -avzh --progress \
+    rsync "$flags" --progress \
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
@@ -91,11 +97,17 @@ function to () {
   pwd=$(dirs)
   args=( "${@:2}" )
   files=( "${args[@]%/}" )
+
+  if [[ $(hostname) = "akashi.bnf.brain.riken.jp" ]]; then
+    flags="-avh"
+  else
+    flags="-avzh"
+  fi
  
   echo -n "send $files to $1:$pwd/ (y/n/all/force)? "
   read a;
-  if [[ "$a" == "y" ]]; then
-    rsync -avzhu --progress \
+  if [[ "$a" = "y" ]]; then
+    rsync "$flags" -u --progress \
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
@@ -106,7 +118,7 @@ function to () {
       --exclude="*/*.dat.gz" \
       "${files[@]}" "$1:$pwd"
   elif [[ "$a" == "all" ]]; then
-    rsync -avzhu --progress \
+    rsync "$flags" -u --progress \
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
@@ -114,7 +126,7 @@ function to () {
       --exclude="*/.git" \
       "${files[@]}" "$1:$pwd"
   elif [[ "$a" == "force" ]]; then
-    rsync -avzh --progress \
+    rsync "$flags" --progress \
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
