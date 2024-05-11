@@ -6,7 +6,7 @@ export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"
 
 # ssh tunnel at port 10000 to remote for jupyterlab
 function jssh () {
-  ssh -t -CL 10000:localhost:10000 "$1" ". ~/.zshrc ; jupyter lab --no-browser --port=10000"
+  ssh -t -CL 10000:localhost:10000 "$1" ". ~/.zshrc ; conda activate si-ks4-test ; jupyter lab --no-browser --port=10000"
 }
 
 # RIKEN Library proxy toggler. Proxy file must be installed.
