@@ -28,6 +28,37 @@ function pdfocrop() {
     pdfcrop "$newfile" "$newfile"
   done
 }
+function invertbw() {
+  # Example usage:
+  # ./invertbw.sh -threshold 10% image1.png image2.png
+  #
+  threshold="1%"
+  
+  # Check for the optional threshold flag
+  while [[ "$1" == -* ]]; do
+    case "$1" in
+      -threshold)
+        shift
+        threshold="$1"
+        ;;
+    esac
+    shift
+  done
+
+  # Process each file
+  for file in "$@"
+  do
+    # Ignore files ending in -inverted
+    if [[ "$file" == *-inverted.* ]]; then
+      echo "Ignoring file: $file"
+      continue
+    fi
+    newfile="${file%.*}-inverted.${file##*.}"
+    magick "$file" \( -clone 0 -colorspace HSB -channel g -separate +channel -threshold "$threshold" \) \
+      \( -clone 0 -clone 1 -alpha off -compose CopyOpacity -composite -negate \) \
+      -delete 1 -compose over -composite "$newfile"
+  done
+}
 
 # Set standard permissions
 function stdmod() {
@@ -65,6 +96,10 @@ alias la='ls -a'
 
 # username@hostname directory #
 PROMPT='%F{green}%n@%m %F{blue}%1~ %f%# '
+
+
+# Turn off beep during autocomplete and history
+unsetopt BEEP
 
 
 # binds up and down to partial history search
