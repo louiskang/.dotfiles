@@ -64,6 +64,7 @@ function from () {
       --exclude="*/compile.sh" \
       --exclude="*/*.dat" \
       --exclude="*/*.dat.gz" \
+      --exclude="*/*.bin" \
       "$1:${files[*]}" "$PWD"
   elif [[ "$a" == "all" ]]; then
     rsync "$flags" -u --progress \
@@ -116,6 +117,7 @@ function to () {
       --exclude="*/compile.sh" \
       --exclude="*/*.dat" \
       --exclude="*/*.dat.gz" \
+      --exclude="*/*.bin" \
       "${files[@]}" "$1:$pwd"
   elif [[ "$a" == "all" ]]; then
     rsync "$flags" -u --progress \
