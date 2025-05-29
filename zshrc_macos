@@ -55,7 +55,7 @@ function from () {
   echo -n "receive ${args[@]%/} from $1:$pwd/ (y/n/all/force)? "
   read a;
   if [[ "$a" = "y" ]]; then
-    rsync "$flags" -u --progress \
+    rsync "$flags" -u --progress --mkpath \
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
@@ -68,7 +68,7 @@ function from () {
       --exclude="*/*.raw" \
       "$1:${files[*]}" "$PWD"
   elif [[ "$a" == "all" ]]; then
-    rsync "$flags" -u --progress \
+    rsync "$flags" -u --progress --mkpath \
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
@@ -76,7 +76,7 @@ function from () {
       --exclude="*/.git" \
       "$1:${files[*]}" "$PWD"
   elif [[ "$a" == "force" ]]; then
-    rsync "$flags" --progress \
+    rsync "$flags" --progress --mkpath \
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
@@ -109,7 +109,7 @@ function to () {
   echo -n "send $files to $1:$pwd/ (y/n/all/force)? "
   read a;
   if [[ "$a" = "y" ]]; then
-    rsync "$flags" -u --progress \
+    rsync "$flags" -u --progress --mkpath \
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
@@ -122,7 +122,7 @@ function to () {
       --exclude="*/*.raw" \
       "${files[@]}" "$1:$pwd"
   elif [[ "$a" == "all" ]]; then
-    rsync "$flags" -u --progress \
+    rsync "$flags" -u --progress --mkpath \
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
@@ -130,7 +130,7 @@ function to () {
       --exclude="*/.git" \
       "${files[@]}" "$1:$pwd"
   elif [[ "$a" == "force" ]]; then
-    rsync "$flags" --progress \
+    rsync "$flags" --progress --mkpath \
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
