@@ -66,6 +66,7 @@ function from () {
       --exclude="*/*.dat.gz" \
       --exclude="*/*.bin" \
       --exclude="*/*.raw" \
+      --exclude="*/.phy" \
       "${files[@]}" "$PWD"
   elif [[ "$a" == "all" ]]; then
     rsync "$flags" -u --progress \
@@ -74,6 +75,7 @@ function from () {
       --exclude="*/.unison" \
       --exclude="*/.ipynb_checkpoints" \
       --exclude="*/.git" \
+      --exclude="*/.phy" \
       "${files[@]}" "$PWD"
   elif [[ "$a" == "force" ]]; then
     rsync "$flags" --progress \
@@ -82,6 +84,7 @@ function from () {
       --exclude="*/.unison" \
       --exclude="*/.ipynb_checkpoints" \
       --exclude="*/.git" \
+      --exclude="*/.phy" \
       "${files[@]}" "$PWD"
   else
     echo -n 'Terminating without transfer'
@@ -120,6 +123,7 @@ function to () {
       --exclude="*/*.dat.gz" \
       --exclude="*/*.bin" \
       --exclude="*/*.raw" \
+      --exclude="*/.phy" \
       "${files[@]}" "$1:$pwd"
   elif [[ "$a" == "all" ]]; then
     rsync "$flags" -u --progress \
@@ -128,6 +132,7 @@ function to () {
       --exclude="*/.unison" \
       --exclude="*/.ipynb_checkpoints" \
       --exclude="*/.git" \
+      --exclude="*/.phy" \
       "${files[@]}" "$1:$pwd"
   elif [[ "$a" == "force" ]]; then
     rsync "$flags" --progress \
@@ -136,6 +141,7 @@ function to () {
       --exclude="*/.unison" \
       --exclude="*/.ipynb_checkpoints" \
       --exclude="*/.git" \
+      --exclude="*/.phy" \
       "${files[@]}" "$1:$pwd"
   else
     echo -n 'Terminating without transfer'
