@@ -43,7 +43,7 @@ function from () {
   args=( "${@:2}" )
   files=()
   for arg in "${args[@]}"; do
-    files+=("$pwd/${arg%/}")
+    files+=("$1:$pwd/${arg%/}")
   done
 
   if [[ $(hostname) = "akashi.bnf.brain.riken.jp" ]]; then
@@ -66,7 +66,7 @@ function from () {
       --exclude="*/*.dat.gz" \
       --exclude="*/*.bin" \
       --exclude="*/*.raw" \
-      "$1:${files[*]}" "$PWD"
+      "${files[@]}" "$PWD"
   elif [[ "$a" == "all" ]]; then
     rsync "$flags" -u --progress --mkpath \
       --exclude="*/.DS_Store" \
@@ -74,7 +74,7 @@ function from () {
       --exclude="*/.unison" \
       --exclude="*/.ipynb_checkpoints" \
       --exclude="*/.git" \
-      "$1:${files[*]}" "$PWD"
+      "${files[@]}" "$PWD"
   elif [[ "$a" == "force" ]]; then
     rsync "$flags" --progress --mkpath \
       --exclude="*/.DS_Store" \
@@ -82,7 +82,7 @@ function from () {
       --exclude="*/.unison" \
       --exclude="*/.ipynb_checkpoints" \
       --exclude="*/.git" \
-      "$1:${files[*]}" "$PWD"
+      "${files[@]}" "$PWD"
   else
     echo -n 'Terminating without transfer'
   fi  
