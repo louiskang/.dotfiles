@@ -109,7 +109,7 @@ function to () {
   echo -n "send $files to $1:$pwd/ (y/n/all/force)? "
   read a;
   if [[ "$a" = "y" ]]; then
-    rsync "$flags" -u --progress --mkpath \
+    rsync "$flags" -u --progress \
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
@@ -122,7 +122,7 @@ function to () {
       --exclude="*/*.raw" \
       "${files[@]}" "$1:$pwd"
   elif [[ "$a" == "all" ]]; then
-    rsync "$flags" -u --progress --mkpath \
+    rsync "$flags" -u --progress \
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
@@ -130,7 +130,7 @@ function to () {
       --exclude="*/.git" \
       "${files[@]}" "$1:$pwd"
   elif [[ "$a" == "force" ]]; then
-    rsync "$flags" --progress --mkpath \
+    rsync "$flags" --progress \
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
