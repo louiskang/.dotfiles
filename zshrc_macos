@@ -43,7 +43,7 @@ function from () {
   args=( "${@:2}" )
   files=()
   for arg in "${args[@]}"; do
-    files+=("$pwd/${arg%/}")
+    files+=("$1:$pwd/${arg%/}")
   done
 
   if [[ $(hostname) = "akashi.bnf.brain.riken.jp" ]]; then
@@ -66,7 +66,8 @@ function from () {
       --exclude="*/*.dat.gz" \
       --exclude="*/*.bin" \
       --exclude="*/*.raw" \
-      "$1:${files[*]}" "$PWD"
+      --exclude="*/.phy" \
+      "${files[@]}" "$PWD"
   elif [[ "$a" == "all" ]]; then
     rsync "$flags" -u --progress \
       --exclude="*/.DS_Store" \
@@ -74,7 +75,8 @@ function from () {
       --exclude="*/.unison" \
       --exclude="*/.ipynb_checkpoints" \
       --exclude="*/.git" \
-      "$1:${files[*]}" "$PWD"
+      --exclude="*/.phy" \
+      "${files[@]}" "$PWD"
   elif [[ "$a" == "force" ]]; then
     rsync "$flags" --progress \
       --exclude="*/.DS_Store" \
@@ -82,7 +84,8 @@ function from () {
       --exclude="*/.unison" \
       --exclude="*/.ipynb_checkpoints" \
       --exclude="*/.git" \
-      "$1:${files[*]}" "$PWD"
+      --exclude="*/.phy" \
+      "${files[@]}" "$PWD"
   else
     echo -n 'Terminating without transfer'
   fi  
@@ -120,6 +123,7 @@ function to () {
       --exclude="*/*.dat.gz" \
       --exclude="*/*.bin" \
       --exclude="*/*.raw" \
+      --exclude="*/.phy" \
       "${files[@]}" "$1:$pwd"
   elif [[ "$a" == "all" ]]; then
     rsync "$flags" -u --progress \
@@ -128,6 +132,7 @@ function to () {
       --exclude="*/.unison" \
       --exclude="*/.ipynb_checkpoints" \
       --exclude="*/.git" \
+      --exclude="*/.phy" \
       "${files[@]}" "$1:$pwd"
   elif [[ "$a" == "force" ]]; then
     rsync "$flags" --progress \
@@ -136,6 +141,7 @@ function to () {
       --exclude="*/.unison" \
       --exclude="*/.ipynb_checkpoints" \
       --exclude="*/.git" \
+      --exclude="*/.phy" \
       "${files[@]}" "$1:$pwd"
   else
     echo -n 'Terminating without transfer'
