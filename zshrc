@@ -14,6 +14,60 @@ function rmls() {
 
 }
 
+
+batchrename() {
+    if [[ $# -ne 2 ]]; then
+        echo "Usage: batchrename <search> <replace>"
+        return 1
+    fi
+
+    local search="$1" replace="$2"
+    local -a files
+
+    files=($(find . -depth -name "*$search*"))
+
+    if [[ ${#files[@]} -eq 0 ]]; then
+        echo "No files or directories found matching '*$search*'."
+        return 0
+    fi
+
+    local has_changes=false
+    for file in "${files[@]}"; do
+        local dir="${file:h}" base="${file:t}"
+        local newbase="${base//$search/$replace}"
+        if [[ "$base" != "$newbase" ]]; then
+            echo "$file -> $dir/$newbase"
+            has_changes=true
+        fi
+    done
+
+    if [[ "$has_changes" == "false" ]]; then
+        echo "No files or directories need renaming."
+        return 0
+    fi
+
+    echo
+    read "ans?Rename all of these? (y/N): "
+
+    if [[ "$ans" == "y" ]]; then
+        for file in "${files[@]}"; do
+            local dir="${file:h}" base="${file:t}"
+            local newbase="${base//$search/$replace}"
+            local target="$dir/$newbase"
+            if [[ "$base" != "$newbase" ]]; then
+                if [[ -e "$target" ]]; then
+                    echo "Skipping '$file' -> '$target' (target exists!)"
+                else
+                    mv "$file" "$target" && echo "Renamed: $file -> $target"
+                fi
+            fi
+        done
+    else
+        echo "Aborted."
+    fi
+}
+
+
 function pdfoutline() {
   for file in "$@"
   do
