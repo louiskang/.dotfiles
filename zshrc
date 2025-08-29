@@ -135,7 +135,8 @@ function phy-fix-waveforms () {
 }
 
 
-alias mv='mv -i'
+alias mv='mv -iv'
+alias cp='cp -iv'
 alias rm='rmls'
 
 if [[ "$(uname 2> /dev/null)" == "Linux" ]]; then
