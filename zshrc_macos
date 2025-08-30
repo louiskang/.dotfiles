@@ -55,7 +55,7 @@ function from () {
   echo -n "receive ${args[@]%/} from $1:$pwd/ (y/n/all/force)? "
   read a;
   if [[ "$a" = "y" ]]; then
-    rsync "$flags" -u --progress \
+    rsync "$flags" -u --progress --mkpath \
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
@@ -69,7 +69,7 @@ function from () {
       --exclude="*/.phy" \
       "${files[@]}" "$PWD"
   elif [[ "$a" == "all" ]]; then
-    rsync "$flags" -u --progress \
+    rsync "$flags" -u --progress --mkpath \
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
@@ -78,7 +78,7 @@ function from () {
       --exclude="*/.phy" \
       "${files[@]}" "$PWD"
   elif [[ "$a" == "force" ]]; then
-    rsync "$flags" --progress \
+    rsync "$flags" --progress --mkpath \
       --exclude="*/.DS_Store" \
       --exclude="*/.*.swp" \
       --exclude="*/.unison" \
