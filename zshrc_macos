@@ -33,6 +33,82 @@ function rikenproxy () {
 # This will copy newer files /pwd/file_or_dir1, etc.,
 # from the server to become local files /pwd/file_or_dir1, etc.
 function from () {
+
+  if [[ $# -lt 2 ]]; then
+    echo 'Usage: from hostname file_or_dir1 [file_or_dir2 ...] [--exclude=pattern ...]'
+    return 1
+  fi
+
+  pwd=$(dirs)
+  host=$1
+  shift
+
+  args=()
+  extra_excludes=()
+
+  # Separate normal args and additional excludes
+  for arg in "$@"; do
+    case "$arg" in
+      --exclude=*)
+        extra_excludes+=("${arg#--exclude=}")
+        ;;
+      *)
+        args+=("$arg")
+        ;;
+    esac
+  done
+
+  files=()
+  for arg in "${args[@]}"; do
+    files+=("$host:$pwd/${arg%/}")
+  done
+
+  if [[ $(hostname) = "akashi.bnf.brain.riken.jp" ]]; then
+    flags="-avh"
+  else
+    flags="-avzh"
+  fi
+
+  echo -n "receive ${args[@]%/} from $host:$pwd/ (y/n/all/force)? "
+  read a
+
+  base_excludes=(
+    "--exclude=*/.DS_Store"
+    "--exclude=*/.*.swp"
+    "--exclude=*/.unison"
+    "--exclude=*/.ipynb_checkpoints"
+    "--exclude=*/.git"
+    "--exclude=*/.phy"
+  )
+
+  # Append any user-supplied excludes
+  for ex in "${extra_excludes[@]}"; do
+    base_excludes+=("--exclude=$ex")
+  done
+
+  if [[ "$a" = "y" ]]; then
+    rsync "$flags" -u --progress --mkpath \
+      "${base_excludes[@]}" \
+      --exclude="*/*.dat" \
+      --exclude="*/*.dat.gz" \
+      --exclude="*/*.bin" \
+      --exclude="*/*.raw" \
+      "${files[@]}" "$PWD"
+  elif [[ "$a" == "all" ]]; then
+    rsync "$flags" -u --progress --mkpath \
+      "${base_excludes[@]}" \
+      "${files[@]}" "$PWD"
+  elif [[ "$a" == "force" ]]; then
+    rsync "$flags" --progress --mkpath \
+      "${base_excludes[@]}" \
+      "${files[@]}" "$PWD"
+  else
+    echo 'Terminating without transfer'
+  fi
+}
+
+
+function fromold () {
  
   if [[ $# -lt 2 ]]; then
     echo 'Usage: from hostname file_or_dir1 [file_or_dir2 ...]'
@@ -92,7 +168,82 @@ function from () {
  
 }
  
+
 function to () {
+
+  if [[ $# -lt 2 ]]; then
+    echo 'Usage: to hostname file_or_dir1 [file_or_dir2 ...] [--exclude=pattern ...]'
+    return 1
+  fi
+
+  pwd=$(dirs)
+  host=$1
+  shift
+
+  args=()
+  extra_excludes=()
+
+  # Separate normal args and --exclude flags
+  for arg in "$@"; do
+    case "$arg" in
+      --exclude=*)
+        extra_excludes+=("${arg#--exclude=}")
+        ;;
+      *)
+        args+=("$arg")
+        ;;
+    esac
+  done
+
+  files=( "${args[@]%/}" )
+
+  if [[ $(hostname) = "akashi.bnf.brain.riken.jp" ]]; then
+    flags="-avh"
+  else
+    flags="-avzh"
+  fi
+
+  echo -n "send ${files[@]} to $host:$pwd/ (y/n/all/force)? "
+  read a
+
+  base_excludes=(
+    "--exclude=*/.DS_Store"
+    "--exclude=*/.*.swp"
+    "--exclude=*/.unison"
+    "--exclude=*/.ipynb_checkpoints"
+    "--exclude=*/.git"
+    "--exclude=*/.phy"
+  )
+
+  # Append user-provided excludes
+  for ex in "${extra_excludes[@]}"; do
+    base_excludes+=("--exclude=$ex")
+  done
+
+  if [[ "$a" = "y" ]]; then
+    rsync "$flags" -u --progress \
+      "${base_excludes[@]}" \
+      --exclude="*/compile.sh" \
+      --exclude="*/*.dat" \
+      --exclude="*/*.dat.gz" \
+      --exclude="*/*.bin" \
+      --exclude="*/*.raw" \
+      "${files[@]}" "$host:$pwd"
+  elif [[ "$a" == "all" ]]; then
+    rsync "$flags" -u --progress \
+      "${base_excludes[@]}" \
+      "${files[@]}" "$host:$pwd"
+  elif [[ "$a" == "force" ]]; then
+    rsync "$flags" --progress \
+      "${base_excludes[@]}" \
+      "${files[@]}" "$host:$pwd"
+  else
+    echo 'Terminating without transfer'
+  fi
+}
+
+
+function toold () {
  
   if [[ $# -lt 2 ]]; then
     echo 'Usage: to hostname file_or_dir1 [file_or_dir2 ...]'
