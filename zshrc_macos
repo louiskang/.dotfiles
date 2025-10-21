@@ -50,7 +50,7 @@ function from () {
   for arg in "$@"; do
     case "$arg" in
       --exclude=*)
-        extra_excludes+=("${arg#--exclude=}")
+        extra_excludes+=("$arg")
         ;;
       *)
         args+=("$arg")
@@ -69,9 +69,6 @@ function from () {
     flags="-avzh"
   fi
 
-  echo -n "receive ${args[@]%/} from $host:$pwd/ (y/n/all/force)? "
-  read a
-
   base_excludes=(
     "--exclude=*/.DS_Store"
     "--exclude=*/.*.swp"
@@ -81,27 +78,36 @@ function from () {
     "--exclude=*/.phy"
   )
 
-  # Append any user-supplied excludes
-  for ex in "${extra_excludes[@]}"; do
-    base_excludes+=("--exclude=$ex")
-  done
+  # Optional excludes used only for the "y" choice
+  optional_excludes=(
+    "--exclude=*/*.dat"
+    "--exclude=*/*.dat.gz"
+    "--exclude=*/*.bin"
+    "--exclude=*/*.raw"
+  )
+
+  echo -n "receive ${args[@]%/} from $host:$pwd/ (y/n/all/force)? "
+  read a
 
   if [[ "$a" = "y" ]]; then
     rsync "$flags" -u --progress --mkpath \
       "${base_excludes[@]}" \
-      --exclude="*/*.dat" \
-      --exclude="*/*.dat.gz" \
-      --exclude="*/*.bin" \
-      --exclude="*/*.raw" \
+      "${optional_excludes[@]}" \
+      "${extra_excludes[@]}" \
       "${files[@]}" "$PWD"
+
   elif [[ "$a" == "all" ]]; then
     rsync "$flags" -u --progress --mkpath \
       "${base_excludes[@]}" \
+      "${extra_excludes[@]}" \
       "${files[@]}" "$PWD"
+
   elif [[ "$a" == "force" ]]; then
     rsync "$flags" --progress --mkpath \
       "${base_excludes[@]}" \
+      "${extra_excludes[@]}" \
       "${files[@]}" "$PWD"
+
   else
     echo 'Terminating without transfer'
   fi
@@ -187,7 +193,7 @@ function to () {
   for arg in "$@"; do
     case "$arg" in
       --exclude=*)
-        extra_excludes+=("${arg#--exclude=}")
+        extra_excludes+=("$arg")
         ;;
       *)
         args+=("$arg")
@@ -203,9 +209,6 @@ function to () {
     flags="-avzh"
   fi
 
-  echo -n "send ${files[@]} to $host:$pwd/ (y/n/all/force)? "
-  read a
-
   base_excludes=(
     "--exclude=*/.DS_Store"
     "--exclude=*/.*.swp"
@@ -215,28 +218,37 @@ function to () {
     "--exclude=*/.phy"
   )
 
-  # Append user-provided excludes
-  for ex in "${extra_excludes[@]}"; do
-    base_excludes+=("--exclude=$ex")
-  done
+  # Optional excludes used only for the "y" choice
+  optional_excludes=(
+    "--exclude=*/compile.sh"
+    "--exclude=*/*.dat"
+    "--exclude=*/*.dat.gz"
+    "--exclude=*/*.bin"
+    "--exclude=*/*.raw"
+  )
+  
+  echo -n "send ${files[@]} to $host:$pwd/ (y/n/all/force)? "
+  read a
 
   if [[ "$a" = "y" ]]; then
     rsync "$flags" -u --progress \
       "${base_excludes[@]}" \
-      --exclude="*/compile.sh" \
-      --exclude="*/*.dat" \
-      --exclude="*/*.dat.gz" \
-      --exclude="*/*.bin" \
-      --exclude="*/*.raw" \
+      "${optional_excludes[@]}" \
+      "${extra_excludes[@]}" \
       "${files[@]}" "$host:$pwd"
+
   elif [[ "$a" == "all" ]]; then
     rsync "$flags" -u --progress \
       "${base_excludes[@]}" \
+      "${extra_excludes[@]}" \
       "${files[@]}" "$host:$pwd"
+
   elif [[ "$a" == "force" ]]; then
     rsync "$flags" --progress \
       "${base_excludes[@]}" \
+      "${extra_excludes[@]}" \
       "${files[@]}" "$host:$pwd"
+
   else
     echo 'Terminating without transfer'
   fi
