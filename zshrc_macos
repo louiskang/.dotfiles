@@ -35,7 +35,7 @@ function rikenproxy () {
 function from () {
 
   if [[ $# -lt 2 ]]; then
-    echo 'Usage: from hostname file_or_dir1 [file_or_dir2 ...] [--exclude=pattern ...]'
+    echo 'Usage: from hostname file_or_dir1 [file_or_dir2 ...] [--exclude=pattern ...] [--phy]'
     return 1
   fi
 
@@ -45,18 +45,31 @@ function from () {
 
   args=()
   extra_excludes=()
+  phy_flag=false
 
-  # Separate normal args and additional excludes
+  # Separate normal args, excludes, and check for --phy flag
   for arg in "$@"; do
     case "$arg" in
       --exclude=*)
         extra_excludes+=("$arg")
+        ;;
+      --phy)
+        phy_flag=true
         ;;
       *)
         args+=("$arg")
         ;;
     esac
   done
+
+  # Add phy-related excludes if flag is set
+  if $phy_flag; then
+    extra_excludes+=(
+      "--exclude=*/analyzer"
+      "--exclude=*/sorter_output"
+      "--exclude=*/analyzer_output"
+    )
+  fi
 
   files=()
   for arg in "${args[@]}"; do
@@ -178,7 +191,7 @@ function fromold () {
 function to () {
 
   if [[ $# -lt 2 ]]; then
-    echo 'Usage: to hostname file_or_dir1 [file_or_dir2 ...] [--exclude=pattern ...]'
+    echo 'Usage: to hostname file_or_dir1 [file_or_dir2 ...] [--exclude=pattern ...] [--phy]'
     return 1
   fi
 
@@ -188,18 +201,31 @@ function to () {
 
   args=()
   extra_excludes=()
+  phy_flag=false
 
-  # Separate normal args and --exclude flags
+  # Separate normal args, excludes, and check for --phy flag
   for arg in "$@"; do
     case "$arg" in
       --exclude=*)
         extra_excludes+=("$arg")
+        ;;
+      --phy)
+        phy_flag=true
         ;;
       *)
         args+=("$arg")
         ;;
     esac
   done
+
+  # Add phy-related excludes if flag is set
+  if $phy_flag; then
+    extra_excludes+=(
+      "--exclude=*/analyzer"
+      "--exclude=*/sorter_output"
+      "--exclude=*/analyzer_output"
+    )
+  fi
 
   files=( "${args[@]%/}" )
 
