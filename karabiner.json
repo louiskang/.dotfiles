@@ -22,7 +22,8 @@
             {
               "type": "frontmost_application_if",
               "bundle_identifiers": [
-                "/miniconda3/envs/phy/bin/python$"
+                "/miniconda3/envs/phy/bin/python$",
+                "/miniforge3/envs/phy/bin/python$"
               ]
             }
           ]
@@ -41,7 +42,8 @@
             {
               "type": "frontmost_application_if",
               "bundle_identifiers": [
-                "/miniconda3/envs/phy/bin/python$"
+                "/miniconda3/envs/phy/bin/python$",
+                "/miniforge3/envs/phy/bin/python$"
               ]
             }
           ]
@@ -98,10 +100,10 @@
           },
           "to": [
             {
-              "key_code": "escape"
-            },
-            {
-              "key_code": "e"
+              "key_code": "e",
+              "modifiers": [
+                "left_option"
+              ]
             }
           ],
           "conditions": [
@@ -229,10 +231,10 @@
           },
           "to": [
             {
-              "key_code": "escape"
-            },
-            {
-              "key_code": "d"
+              "key_code": "d",
+              "modifiers": [
+                "left_option"
+              ]
             }
           ],
           "conditions": [
@@ -262,10 +264,10 @@
           },
           "to": [
             {
-              "key_code": "escape"
-            },
-            {
-              "key_code": "d"
+              "key_code": "d",
+              "modifiers": [
+                "left_option"
+              ]
             }
           ],
           "conditions": [
@@ -463,10 +465,10 @@
           },
           "to": [
             {
-              "key_code": "escape"
-            },
-            {
-              "key_code": "b"
+              "key_code": "b",
+              "modifiers": [
+                "left_option"
+              ]
             }
           ],
           "conditions": [
@@ -495,10 +497,10 @@
           },
           "to": [
             {
-              "key_code": "escape"
-            },
-            {
-              "key_code": "f"
+              "key_code": "f",
+              "modifiers": [
+                "left_option"
+              ]
             }
           ],
           "conditions": [
@@ -527,12 +529,10 @@
           },
           "to": [
             {
-              "key_code": "escape"
-            },
-            {
               "key_code": "b",
               "modifiers": [
-                "right_control"
+                "right_control",
+                "left_option"
               ]
             }
           ],
@@ -562,12 +562,10 @@
           },
           "to": [
             {
-              "key_code": "escape"
-            },
-            {
               "key_code": "f",
               "modifiers": [
-                "right_control"
+                "right_control",
+                "left_option"
               ]
             }
           ],
@@ -589,3 +587,4 @@
     }
   ]
 }
+
