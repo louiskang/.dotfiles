@@ -39,15 +39,17 @@ function from () {
     return 1
   fi
 
-  pwd=$(dirs)
-  host=$1
+  # $PWD with literal ~ to be used for remote host
+  local pwd="${PWD/#$HOME/~}"
+  local host=$1
   shift
 
-  args=()
-  extra_excludes=()
-  phy_flag=false
+  local args=()
+  local extra_excludes=()
+  local phy_flag=false
 
   # Separate normal args, excludes, and check for --phy flag
+  local arg
   for arg in "$@"; do
     case "$arg" in
       --exclude=*)
@@ -71,18 +73,17 @@ function from () {
     )
   fi
 
-  files=()
+  local files=()
   for arg in "${args[@]}"; do
     files+=("$host:$pwd/${arg%/}")
   done
 
-  if [[ $(hostname) = "akashi.bnf.brain.riken.jp" ]]; then
-    flags="-avh --progress --mkpath"
-  else
-    flags="-avzh --progress --mkpath"
+  local flags=( -avh --progress --mkpath )
+  if [[ $(hostname) != "akashi.bnf.brain.riken.jp" ]]; then
+    flags+=( -z )
   fi
 
-  base_excludes=(
+  local base_excludes=(
     "--exclude=*/.DS_Store"
     "--exclude=*/.*.swp"
     "--exclude=*/.unison"
@@ -92,7 +93,7 @@ function from () {
   )
 
   # Optional excludes used only for the "y" choice
-  optional_excludes=(
+  local optional_excludes=(
     "--exclude=*/*.dat"
     "--exclude=*/*.dat.gz"
     "--exclude=*/*.bin"
@@ -100,23 +101,24 @@ function from () {
   )
 
   echo -n "receive ${args[@]%/} from $host:$pwd/ (y/n/all/force)? "
-  read a
+  local a
+  read -r a
 
   if [[ "$a" = "y" ]]; then
-    rsync "$flags" -u \
+    rsync "${flags[@]}" -u \
       "${base_excludes[@]}" \
       "${optional_excludes[@]}" \
       "${extra_excludes[@]}" \
       "${files[@]}" "$PWD"
 
   elif [[ "$a" == "all" ]]; then
-    rsync "$flags" -u \
+    rsync "${flags[@]}" -u \
       "${base_excludes[@]}" \
       "${extra_excludes[@]}" \
       "${files[@]}" "$PWD"
 
   elif [[ "$a" == "force" ]]; then
-    rsync "$flags" \
+    rsync "${flags[@]}" \
       "${base_excludes[@]}" \
       "${extra_excludes[@]}" \
       "${files[@]}" "$PWD"
@@ -134,15 +136,17 @@ function to () {
     return 1
   fi
 
-  pwd=$(dirs)
-  host=$1
+  # $PWD with literal ~ to be used for remote host
+  local pwd="${PWD/#$HOME/~}"
+  local host=$1
   shift
 
-  args=()
-  extra_excludes=()
-  phy_flag=false
+  local args=()
+  local extra_excludes=()
+  local phy_flag=false
 
   # Separate normal args, excludes, and check for --phy flag
+  local arg
   for arg in "$@"; do
     case "$arg" in
       --exclude=*)
@@ -166,15 +170,14 @@ function to () {
     )
   fi
 
-  files=( "${args[@]%/}" )
+  local files=( "${args[@]%/}" )
 
-  if [[ $(hostname) = "akashi.bnf.brain.riken.jp" ]]; then
-    flags="-avh --progress --mkpath"
-  else
-    flags="-avzh --progress --mkpath"
+  local flags=( -avh --progress --mkpath )
+  if [[ $(hostname) != "akashi.bnf.brain.riken.jp" ]]; then
+    flags+=( -z )
   fi
 
-  base_excludes=(
+  local base_excludes=(
     "--exclude=*/.DS_Store"
     "--exclude=*/.*.swp"
     "--exclude=*/.unison"
@@ -184,7 +187,7 @@ function to () {
   )
 
   # Optional excludes used only for the "y" choice
-  optional_excludes=(
+  local optional_excludes=(
     "--exclude=*/compile.sh"
     "--exclude=*/*.dat"
     "--exclude=*/*.dat.gz"
@@ -193,23 +196,24 @@ function to () {
   )
   
   echo -n "send ${files[@]} to $host:$pwd/ (y/n/all/force)? "
-  read a
+  local a
+  read -r a
 
   if [[ "$a" = "y" ]]; then
-    rsync "$flags" -u \
+    rsync "${flags[@]}" -u \
       "${base_excludes[@]}" \
       "${optional_excludes[@]}" \
       "${extra_excludes[@]}" \
       "${files[@]}" "$host:$pwd"
 
   elif [[ "$a" == "all" ]]; then
-    rsync "$flags" -u \
+    rsync "${flags[@]}" -u \
       "${base_excludes[@]}" \
       "${extra_excludes[@]}" \
       "${files[@]}" "$host:$pwd"
 
   elif [[ "$a" == "force" ]]; then
-    rsync "$flags" \
+    rsync "${flags[@]}" \
       "${base_excludes[@]}" \
       "${extra_excludes[@]}" \
       "${files[@]}" "$host:$pwd"

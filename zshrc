@@ -10,6 +10,9 @@ PROMPT='%F{green}%n@%m %F{blue}%1~ %f%# '
 # Turn off beep during autocomplete and history
 unsetopt BEEP
 
+# Prevent Delete key from closing Terminal
+setopt IGNORE_EOF
+
 
 # binds up and down to partial history search
 autoload -U history-search-end
