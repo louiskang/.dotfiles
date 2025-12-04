@@ -38,6 +38,10 @@ function from () {
     echo 'Usage: from hostname file_or_dir1 [file_or_dir2 ...] [--exclude=pattern ...] [--phy]'
     return 1
   fi
+  if [[ $PWD != "$HOME"/* ]]; then
+    echo "Current directory is not under \$HOME"
+    return 1
+  fi
 
   # $PWD with literal ~ to be used for remote host
   local pwd="${PWD/#$HOME/~}"
@@ -104,7 +108,7 @@ function from () {
   local a
   read -r a
 
-  if [[ "$a" = "y" ]]; then
+  if [[ "$a" == "y" ]]; then
     rsync "${flags[@]}" -u \
       "${base_excludes[@]}" \
       "${optional_excludes[@]}" \
@@ -133,6 +137,10 @@ function to () {
 
   if [[ $# -lt 2 ]]; then
     echo 'Usage: to hostname file_or_dir1 [file_or_dir2 ...] [--exclude=pattern ...] [--phy]'
+    return 1
+  fi
+  if [[ $PWD != "$HOME"/* ]]; then
+    echo "Current directory is not under \$HOME"
     return 1
   fi
 
@@ -199,7 +207,7 @@ function to () {
   local a
   read -r a
 
-  if [[ "$a" = "y" ]]; then
+  if [[ "$a" == "y" ]]; then
     rsync "${flags[@]}" -u \
       "${base_excludes[@]}" \
       "${optional_excludes[@]}" \
