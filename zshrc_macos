@@ -74,6 +74,8 @@ function from () {
       "--exclude=*/analyzer"
       "--exclude=*/sorter_output"
       "--exclude=*/analyzer_output"
+      "--exclude=*/results"
+      "--exclude=*/*.ipynb"
     )
   fi
 
@@ -175,6 +177,8 @@ function to () {
       "--exclude=*/analyzer"
       "--exclude=*/sorter_output"
       "--exclude=*/analyzer_output"
+      "--exclude=*/results"
+      "--exclude=*/*.ipynb"
     )
   fi
 
