@@ -100,7 +100,7 @@ batchrename() {
                 if [[ -e "$target" ]]; then
                     echo "Skipping '$file' -> '$target' (target exists!)"
                 else
-                    mv "$file" "$target" && echo "Renamed: $file -> $target"
+                    \mv "$file" "$target" && echo "renamed '$file' -> '$target'"
                 fi
             fi
         done
