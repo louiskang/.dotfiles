@@ -31,6 +31,9 @@ bindkey "^[[B" history-beginning-search-forward-end
 #bindkey "^[[F"  end-of-line
 
 
+# Allow alias expansion after sudo
+alias sudo='sudo '
+
 # Confirm file delete
 function rmls() {
 
