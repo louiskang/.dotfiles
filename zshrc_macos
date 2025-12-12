@@ -81,10 +81,10 @@ function from () {
 
   local files=()
   for arg in "${args[@]}"; do
-    files+=("$host:$pwd/${arg%/}")
+    files+=("$host:$pwd/./${arg%/}")
   done
 
-  local flags=( -avh --progress --mkpath )
+  local flags=( -avh --progress --mkpath --relative )
   if [[ $(hostname) != "akashi.bnf.brain.riken.jp" ]]; then
     flags+=( -z )
   fi
@@ -182,9 +182,12 @@ function to () {
     )
   fi
 
-  local files=( "${args[@]%/}" )
+  local files=()
+  for arg in "${args[@]}"; do
+    files+=( "./${arg%/}" )
+  done
 
-  local flags=( -avh --progress --mkpath )
+  local flags=( -avh --progress --mkpath --relative )
   if [[ $(hostname) != "akashi.bnf.brain.riken.jp" ]]; then
     flags+=( -z )
   fi
