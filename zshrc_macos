@@ -190,7 +190,10 @@ function to () {
   local flags=( -avh --progress --mkpath --relative )
   if [[ $(hostname) != "akashi.bnf.brain.riken.jp" ]]; then
     flags+=( -z )
+  elif
+    flags+=( --rsync-path="env PATH=/opt/homebrew/bin:/usr/local/bin:\$PATH rsync" )
   fi
+  
 
   local base_excludes=(
     "--exclude=*/.DS_Store"
