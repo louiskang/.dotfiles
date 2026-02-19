@@ -85,8 +85,11 @@ function from () {
   done
 
   local flags=( -avh --progress --mkpath --relative )
-  if [[ $(hostname) != "akashi.bnf.brain.riken.jp" ]]; then
+  if [[ $HOST != *.riken.jp ]]; then
     flags+=( -z )
+  fi
+  if [[ $host == akashi ]]; then
+    flags+=( --rsync-path="/usr/local/bin/rsync" )
   fi
 
   local base_excludes=(
@@ -188,10 +191,11 @@ function to () {
   done
 
   local flags=( -avh --progress --mkpath --relative )
-  if [[ $(hostname) != "akashi.bnf.brain.riken.jp" ]]; then
+  if [[ $HOST != *.riken.jp ]]; then
     flags+=( -z )
-  else
-    flags+=( --rsync-path="env PATH=/opt/homebrew/bin:/usr/local/bin:\$PATH rsync" )
+  fi
+  if [[ $host == akashi ]]; then
+    flags+=( --rsync-path="/usr/local/bin/rsync" )
   fi
   
 
