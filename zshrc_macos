@@ -38,7 +38,7 @@ function from () {
     echo 'Usage: from hostname file_or_dir1 [file_or_dir2 ...] [--exclude=pattern ...] [--phy]'
     return 1
   fi
-  if [[ $PWD != "$HOME"/* ]]; then
+  if [[ $PWD != "$HOME" && $PWD != "$HOME"/* ]]; then
     echo "Current directory is not under \$HOME"
     return 1
   fi
@@ -144,7 +144,7 @@ function to () {
     echo 'Usage: to hostname file_or_dir1 [file_or_dir2 ...] [--exclude=pattern ...] [--phy]'
     return 1
   fi
-  if [[ $PWD != "$HOME"/* ]]; then
+  if [[ $PWD != "$HOME" && $PWD != "$HOME"/* ]]; then
     echo "Current directory is not under \$HOME"
     return 1
   fi
