@@ -60,6 +60,13 @@ alias cp='cp -iv'
 alias rsync='rsync -rvh --progress'
 
 
+findn() {
+  local pattern="$1"
+  local dir="${2:-.}"
+  find "$dir" -iname "*${pattern}*"
+}
+
+
 batchrename() {
     if [[ $# -ne 2 ]]; then
         echo "Usage: batchrename <search> <replace>"
