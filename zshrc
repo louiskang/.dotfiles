@@ -63,7 +63,7 @@ alias rsync='rsync -rvh --progress'
 findn() {
   local pattern="$1"
   local dir="${2:-.}"
-  find "$dir" -iname "*${pattern}*"
+  find "$dir" -iname "*${pattern}*" | sort
 }
 
 
