@@ -67,6 +67,225 @@ findn() {
 }
 
 
+
+
+# Usage: from hostname file_or_dir1 [file_or_dir2 ...]
+# This will copy newer files /pwd/file_or_dir1, etc.,
+# from the server to become local files /pwd/file_or_dir1, etc.
+function from () {
+
+  if [[ $# -lt 2 ]]; then
+    echo 'Usage: from hostname file_or_dir1 [file_or_dir2 ...] [--exclude=pattern ...] [--phy]'
+    return 1
+  fi
+  if [[ $PWD != "$HOME" && $PWD != "$HOME"/* ]]; then
+    echo "Current directory is not under \$HOME"
+    return 1
+  fi
+
+  # $PWD with literal ~ to be used for remote host
+  local pwd="${PWD/#$HOME/~}"
+  local host=$1
+  shift
+
+  local args=()
+  local extra_excludes=()
+  local phy_flag=false
+
+  # Separate normal args, excludes, and check for --phy flag
+  local arg
+  for arg in "$@"; do
+    case "$arg" in
+      --exclude=*)
+        extra_excludes+=("$arg")
+        ;;
+      --phy)
+        phy_flag=true
+        ;;
+      *)
+        args+=("$arg")
+        ;;
+    esac
+  done
+
+  # Add phy-related excludes if flag is set
+  if $phy_flag; then
+    extra_excludes+=(
+      "--exclude=*/analyzer"
+      "--exclude=*/sorter_output"
+      "--exclude=*/analyzer_output"
+      "--exclude=*/results"
+      "--exclude=*/*.ipynb"
+    )
+  fi
+
+  local files=()
+  for arg in "${args[@]}"; do
+    files+=("$host:$pwd/./${arg%/}")
+  done
+
+  local flags=( -avh --progress --mkpath --relative )
+  if [[ $HOST != *.riken.jp ]]; then
+    flags+=( -z )
+  fi
+  if [[ $host == akashi ]]; then
+    flags+=( --rsync-path="/usr/local/bin/rsync" )
+  fi
+
+  local base_excludes=(
+    "--exclude=*/.DS_Store"
+    "--exclude=*/.*.swp"
+    "--exclude=*/.unison"
+    "--exclude=*/.ipynb_checkpoints"
+    "--exclude=*/.git"
+    "--exclude=*/.phy"
+  )
+
+  # Optional excludes used only for the "y" choice
+  local optional_excludes=(
+    "--exclude=*/*.dat"
+    "--exclude=*/*.dat.gz"
+    "--exclude=*/*.bin"
+    "--exclude=*/*.raw"
+  )
+
+  echo -n "receive ${args[@]%/} from $host:$pwd/ (y/n/all/force)? "
+  local a
+  read -r a
+
+  if [[ "$a" == "y" ]]; then
+    rsync "${flags[@]}" -u \
+      "${base_excludes[@]}" \
+      "${optional_excludes[@]}" \
+      "${extra_excludes[@]}" \
+      "${files[@]}" "$PWD"
+
+  elif [[ "$a" == "all" ]]; then
+    rsync "${flags[@]}" -u \
+      "${base_excludes[@]}" \
+      "${extra_excludes[@]}" \
+      "${files[@]}" "$PWD"
+
+  elif [[ "$a" == "force" ]]; then
+    rsync "${flags[@]}" \
+      "${base_excludes[@]}" \
+      "${extra_excludes[@]}" \
+      "${files[@]}" "$PWD"
+
+  else
+    echo 'Terminating without transfer'
+  fi
+}
+
+
+function to () {
+
+  if [[ $# -lt 2 ]]; then
+    echo 'Usage: to hostname file_or_dir1 [file_or_dir2 ...] [--exclude=pattern ...] [--phy]'
+    return 1
+  fi
+  if [[ $PWD != "$HOME" && $PWD != "$HOME"/* ]]; then
+    echo "Current directory is not under \$HOME"
+    return 1
+  fi
+
+  # $PWD with literal ~ to be used for remote host
+  local pwd="${PWD/#$HOME/~}"
+  local host=$1
+  shift
+
+  local args=()
+  local extra_excludes=()
+  local phy_flag=false
+
+  # Separate normal args, excludes, and check for --phy flag
+  local arg
+  for arg in "$@"; do
+    case "$arg" in
+      --exclude=*)
+        extra_excludes+=("$arg")
+        ;;
+      --phy)
+        phy_flag=true
+        ;;
+      *)
+        args+=("$arg")
+        ;;
+    esac
+  done
+
+  # Add phy-related excludes if flag is set
+  if $phy_flag; then
+    extra_excludes+=(
+      "--exclude=*/analyzer"
+      "--exclude=*/sorter_output"
+      "--exclude=*/analyzer_output"
+      "--exclude=*/results"
+      "--exclude=*/*.ipynb"
+    )
+  fi
+
+  local files=()
+  for arg in "${args[@]}"; do
+    files+=( "./${arg%/}" )
+  done
+
+  local flags=( -avh --progress --mkpath --relative )
+  if [[ $HOST != *.riken.jp ]]; then
+    flags+=( -z )
+  fi
+  if [[ $host == akashi ]]; then
+    flags+=( --rsync-path="/usr/local/bin/rsync" )
+  fi
+  
+
+  local base_excludes=(
+    "--exclude=*/.DS_Store"
+    "--exclude=*/.*.swp"
+    "--exclude=*/.unison"
+    "--exclude=*/.ipynb_checkpoints"
+    "--exclude=*/.git"
+    "--exclude=*/.phy"
+  )
+
+  # Optional excludes used only for the "y" choice
+  local optional_excludes=(
+    "--exclude=*/compile.sh"
+    "--exclude=*/*.dat"
+    "--exclude=*/*.dat.gz"
+    "--exclude=*/*.bin"
+    "--exclude=*/*.raw"
+  )
+  
+  echo -n "send ${files[@]} to $host:$pwd/ (y/n/all/force)? "
+  local a
+  read -r a
+
+  if [[ "$a" == "y" ]]; then
+    rsync "${flags[@]}" -u \
+      "${base_excludes[@]}" \
+      "${optional_excludes[@]}" \
+      "${extra_excludes[@]}" \
+      "${files[@]}" "$host:$pwd"
+
+  elif [[ "$a" == "all" ]]; then
+    rsync "${flags[@]}" -u \
+      "${base_excludes[@]}" \
+      "${extra_excludes[@]}" \
+      "${files[@]}" "$host:$pwd"
+
+  elif [[ "$a" == "force" ]]; then
+    rsync "${flags[@]}" \
+      "${base_excludes[@]}" \
+      "${extra_excludes[@]}" \
+      "${files[@]}" "$host:$pwd"
+
+  else
+    echo 'Terminating without transfer'
+  fi
+}
+
+
 batchrename() {
     if [[ $# -ne 2 ]]; then
         echo "Usage: batchrename <search> <replace>"
@@ -179,12 +398,12 @@ function stdmod() {
 
 }
 
-function phy-fix-waveforms () {
-  
-  (echo "import numpy as np" ; \
-    echo "np.load('_phy_spikes_subset.waveforms.npy')") | python
-
-}
+# function phy-fix-waveforms () {
+#   
+#   (echo "import numpy as np" ; \
+#     echo "np.load('_phy_spikes_subset.waveforms.npy')") | python
+# 
+# }
 
 
 # setup Intel oneAPI environment
