@@ -143,7 +143,7 @@ function send () {
  
   local flags=( -avh --progress --mkpath --relative )
   # *.riken.jp must stay unquoted -- it is a pattern
-  if [[ "$HOST" != *.riken.jp ]]; then
+  if [[ "$HOST" != *.riken.jp && "$HOST" != nccu ]]; then
     flags+=( -z )
   fi
   case "$host" in
