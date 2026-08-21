@@ -84,8 +84,13 @@ function from () {
   fi
 
   # $PWD with literal ~ to be used for remote host
-  local pwd="${PWD/#$HOME/~}"
-  local host=$1
+  if [[ "$1" == "experiments" || "$1" == "buffalo" ]]; then
+    local pwd="${PWD/#$HOME/\/Volumes\/experiments}"
+    local host="buffalo"
+  else
+    local pwd="${PWD/#$HOME/~}"
+    local host=$1
+  fi
   shift
 
   local args=()
@@ -190,8 +195,13 @@ function to () {
   fi
 
   # $PWD with literal ~ to be used for remote host
-  local pwd="${PWD/#$HOME/~}"
-  local host=$1
+  if [[ "$1" == "experiments" || "$1" == "buffalo" ]]; then
+    local pwd="${PWD/#$HOME/\/Volumes\/experiments}"
+    local host="buffalo"
+  else
+    local pwd="${PWD/#$HOME/~}"
+    local host=$1
+  fi
   shift
 
   local args=()
